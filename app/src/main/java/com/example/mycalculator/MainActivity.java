@@ -19,8 +19,17 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 
 public class MainActivity extends AppCompatActivity {
+    private boolean isAfterOperation = false;
+    private boolean isNumber(String text) {
+        return text.matches("[0-9]+");
+    }
+
+    private boolean isOperator(String text) {
+        return text.matches("[+\\-*/'sqr'( )]");
+    }
     private Button button12; // 声明按钮变量
     private Button button15; // 声明按钮变量
+    private Button button19; // 声明按钮变量
     private TextView textViewDisplay;
     private static final String TAG = "MainActivity";
     private List<Calculation> calculations; // 存储历史记录
@@ -46,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         button15.setOnClickListener(v -> {
 //            // 处理等号按钮的点击事件
 //            Toast.makeText(this, "等号按钮被点击了！", Toast.LENGTH_SHORT).show();
-//            // 这里可以添加计算逻辑
+//
             cancel();
         });
         button12 = findViewById(R.id.button12);
@@ -58,11 +67,15 @@ public class MainActivity extends AppCompatActivity {
           evaluate(textViewDisplay.getText().toString());
 
         });
+        button19= findViewById(R.id.button19);
+        button19.setOnClickListener(v -> {
+            deleteAll();
+        });
         // 为所有按钮设置点击事件
         int[] buttonIds = new int[] {
                 R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5,
                 R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11
-                , R.id.button13, R.id.button14, R.id.button16, R.id.button17, R.id.button18, R.id.button19
+                , R.id.button13, R.id.button14, R.id.button16, R.id.button17, R.id.button18
         };
 
         for (int buttonId : buttonIds) {
@@ -72,11 +85,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updateDisplay(String text) {
-        // 更新显示屏的文本
-        //Log.d("Calculator", "Appending text: " + text);
-        textViewDisplay.append(ToDBC(text)); // 使用append来追加文本
+
+private void updateDisplay(String text) {
+    if (isAfterOperation && isNumber(text)) {
+        // 如果是数字，并且是在运算之后，清空显示屏并显示这个数字
+        textViewDisplay.setText(text);
+        isAfterOperation = false; // 重置标志位
+    } else if (isOperator(text)) {
+        // 如果是运算符，直接追加到显示屏
+        String currentText = textViewDisplay.getText().toString();
+        if (!currentText.isEmpty() && !currentText.endsWith(" ")) {
+            textViewDisplay.append(text);
+        }
+    } else {
+        textViewDisplay.append(ToDBC(text));
     }
+}
     private void cancel(){
         String currentText = textViewDisplay.getText().toString();
         Log.d(TAG, "Current text: " + currentText);
@@ -85,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
             String newText = currentText.substring(0, currentText.length() - 1);  // 删除最后一个字符  
             textViewDisplay.setText(newText);
         }
+    }
+    private void deleteAll(){
+        textViewDisplay.setText("");
     }
 
     public void evaluate(String expression) {
@@ -96,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             double result = exp.evaluate(); // 计算结果
             textViewDisplay.setText(String.valueOf(result));
 
+            isAfterOperation = true; // 设置标志位为true
             // 保存历史记录
             // 添加到历史记录中，倒序插入
 
@@ -106,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
+
     public static String ToDBC(String str) {
 
         char[] c = str.toCharArray();
