@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isOperator(String text) {
-        return text.matches("[+\\-*/'sqr'( )]");
+        return text.matches("[+\\-*/'sqr']");
     }
     private Button button12; // 声明按钮变量
     private Button button15; // 声明按钮变量
@@ -119,15 +119,25 @@ private void updateDisplay(String text) {
             String currentText = textViewDisplay.getText().toString();
             Log.d(TAG, "calculate "+currentText);
             // 使用 exp4j 解析和计算表达式
-            Expression exp = new ExpressionBuilder(expression).build();
-            double result = exp.evaluate(); // 计算结果
-            textViewDisplay.setText(String.valueOf(result));
+ try {
+     Expression exp = new ExpressionBuilder(expression).build();
+
+
+     double result = exp.evaluate(); // 计算结果
+     textViewDisplay.setText(String.valueOf(result));
+     calculations.add(0,new Calculation(expression, String.valueOf(result)));
+ }catch(ArithmeticException e){
+
+     textViewDisplay.setText("ERROR");
+     calculations.add(0,new Calculation(expression, "ERROR"));
+ }
+
 
             isAfterOperation = true; // 设置标志位为true
             // 保存历史记录
             // 添加到历史记录中，倒序插入
 
-            calculations.add(0,new Calculation(expression, String.valueOf(result)));
+
             adapter.notifyDataSetChanged(); // 更新适配器
         } catch (Exception e) {
             System.out.println("表达式无效: " + e.getMessage());

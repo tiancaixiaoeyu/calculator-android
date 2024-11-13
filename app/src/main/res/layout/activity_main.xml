@@ -10,7 +10,8 @@
         android:orientation="vertical">
 
 
-            <!-- 其他计算器视图 -->
+
+
             <TextView
                 android:id="@+id/textViewDisplay"
                 android:layout_width="377dp"
@@ -22,9 +23,16 @@
                 android:gravity="end|center_vertical"
                 android:padding="16dp"
                 android:textSize="40sp"
-                android:maxLines="1"
+
+                android:fadeScrollbars="false"
+                android:maxLines="3"
+                android:singleLine="false"
+                android:scrollHorizontally="true"
+                android:scrollbars="vertical"
                 android:breakStrategy="simple"
-                />
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -98,6 +106,7 @@
                         android:layout_column="3"
 
                         android:layout_gravity="fill"
+
                         android:text="@string/_6" />
 
                     <Button
