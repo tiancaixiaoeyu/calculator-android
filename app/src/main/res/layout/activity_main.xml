@@ -36,16 +36,16 @@
 
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="391dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:columnCount="5"
-                android:rowCount="8">
+                android:rowCount="9">
                     <!-- 按钮 -->
                     <Button
                         android:id="@+id/button0"
                         style="@style/Widget.App.Button.TextButton"
                         android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:layout_rowSpan="1"
                         android:layout_columnSpan="2"
                         android:layout_gravity="fill"
@@ -55,7 +55,7 @@
                         android:id="@+id/button1"
                         style="@style/Widget.App.Button.TextButton"
                         android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:layout_rowSpan="1"
                         android:layout_columnSpan="1"
                         android:layout_gravity="fill"
@@ -66,7 +66,7 @@
                         android:id="@+id/button2"
                         style="@style/Widget.App.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:layout_rowSpan="1"
                         android:layout_columnSpan="1"
                         android:layout_gravity="fill"
@@ -231,7 +231,7 @@
                         android:layout_rowSpan="1"
                         android:layout_column="1"
                         android:layout_gravity="fill"
-                        android:text="@string/_16" />
+                        android:text="." />
 
                     <Button
                         android:id="@+id/button17"
@@ -265,6 +265,31 @@
                         android:layout_column="4"
                         android:layout_gravity="fill"
                         android:text="@string/_20" />
+
+
+                    <Button
+                        android:id="@+id/button31"
+                        style="@style/Widget.App.Button.TextButton"
+                        android:layout_width="156dp"
+                        android:layout_height="80dp"
+                        android:layout_row="8"
+                        android:layout_rowSpan="1"
+                        android:layout_columnSpan="2"
+                        android:layout_column="1"
+                        android:layout_gravity="fill"
+                        android:text="sqrt" />
+                    <Button
+                        android:id="@+id/button32"
+                        style="@style/Widget.App.Button.TextButton"
+                        android:layout_width="156dp"
+                        android:layout_height="80dp"
+                        android:layout_row="8"
+                        android:layout_rowSpan="1"
+                        android:layout_column="3"
+                        android:layout_columnSpan="2"
+                        android:layout_gravity="fill"
+                        android:text="LOG" />
+
             </GridLayout>
 
             <ListView

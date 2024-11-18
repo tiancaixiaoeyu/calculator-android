@@ -20,6 +20,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class MainActivity extends AppCompatActivity {
     private boolean isAfterOperation = false;
+
     private boolean isNumber(String text) {
         return text.matches("[0-9]+");
     }
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isOperator(String text) {
         return text.matches("[+\\-*/'sqr']");
     }
+
     private Button button12; // 声明按钮变量
     private Button button15; // 声明按钮变量
     private Button button19; // 声明按钮变量
@@ -40,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
 
         calculations = new ArrayList<>(); // 初始化列表
@@ -64,18 +64,18 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "等号按钮被点击了！", Toast.LENGTH_SHORT).show();
 //
             Log.d(TAG, "onclick =");
-          evaluate(textViewDisplay.getText().toString());
+            evaluate(textViewDisplay.getText().toString());
 
         });
-        button19= findViewById(R.id.button19);
+        button19 = findViewById(R.id.button19);
         button19.setOnClickListener(v -> {
             deleteAll();
         });
         // 为所有按钮设置点击事件
-        int[] buttonIds = new int[] {
+        int[] buttonIds = new int[]{
                 R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5,
                 R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11
-                , R.id.button13, R.id.button14, R.id.button16, R.id.button17, R.id.button18
+                , R.id.button13, R.id.button14, R.id.button16, R.id.button17, R.id.button18, R.id.button31, R.id.button32,
         };
 
         for (int buttonId : buttonIds) {
@@ -83,25 +83,39 @@ public class MainActivity extends AppCompatActivity {
             button.setOnClickListener(v -> updateDisplay(button.getText().toString()));
         }
     }
+    public static Object returnIntegerIfPossible(double value) {
+        // 检查浮点数是否为整数（即没有小数部分）
+        if (value == (int) value) {
+            // 如果是整数，则返回其整数部分（通过类型转换将其转换为int类型）
+            return (int) value;
+        } else {
+            // 如果不是整数，则返回一个提示信息
+           return value;
+        }}
 
 
+    private void updateDisplay(String text) {
+        if (isAfterOperation && isNumber(text)) {
+            // 如果是数字，并且是在运算之后，清空显示屏并显示这个数字
+            textViewDisplay.setText(text);
+            isAfterOperation = false; // 重置标志位
+        } else
+            if ( isAfterOperation&& isOperator(text)) {
+            // 如果是运算符，直接追加到显示屏
+            String currentText = textViewDisplay.getText().toString();
+            if (!currentText.isEmpty() && !currentText.endsWith(" ")) {
+                textViewDisplay.append(text);
+//
+            }
+                isAfterOperation = false;
 
-private void updateDisplay(String text) {
-    if (isAfterOperation && isNumber(text)) {
-        // 如果是数字，并且是在运算之后，清空显示屏并显示这个数字
-        textViewDisplay.setText(text);
-        isAfterOperation = false; // 重置标志位
-    } else if (isOperator(text)) {
-        // 如果是运算符，直接追加到显示屏
-        String currentText = textViewDisplay.getText().toString();
-        if (!currentText.isEmpty() && !currentText.endsWith(" ")) {
+            } else {
             textViewDisplay.append(text);
+
         }
-    } else {
-        textViewDisplay.append(ToDBC(text));
     }
-}
-    private void cancel(){
+
+    private void cancel() {
         String currentText = textViewDisplay.getText().toString();
         Log.d(TAG, "Current text: " + currentText);
         Log.d(TAG, "cancel: ");
@@ -110,27 +124,28 @@ private void updateDisplay(String text) {
             textViewDisplay.setText(newText);
         }
     }
-    private void deleteAll(){
+
+    private void deleteAll() {
         textViewDisplay.setText("");
     }
 
     public void evaluate(String expression) {
         try {
             String currentText = textViewDisplay.getText().toString();
-            Log.d(TAG, "calculate "+currentText);
+            Log.d(TAG, "calculate " + currentText);
             // 使用 exp4j 解析和计算表达式
- try {
-     Expression exp = new ExpressionBuilder(expression).build();
+            try {
+                Expression exp = new ExpressionBuilder(expression).build();
 
 
-     double result = exp.evaluate(); // 计算结果
-     textViewDisplay.setText(String.valueOf(result));
-     calculations.add(0,new Calculation(expression, String.valueOf(result)));
- }catch(ArithmeticException e){
+                double result = exp.evaluate(); // 计算结果
+                textViewDisplay.setText(String.valueOf(returnIntegerIfPossible(result)));
+                calculations.add(0, new Calculation(expression, String.valueOf(result)));
+            } catch (ArithmeticException e) {
 
-     textViewDisplay.setText("ERROR");
-     calculations.add(0,new Calculation(expression, "ERROR"));
- }
+                textViewDisplay.setText("ERROR");
+                calculations.add(0, new Calculation(expression, "ERROR"));
+            }
 
 
             isAfterOperation = true; // 设置标志位为true
@@ -146,28 +161,4 @@ private void updateDisplay(String text) {
     }
 
 
-
-    public static String ToDBC(String str) {
-
-        char[] c = str.toCharArray();
-
-        for (int i = 0; i < c.length; i++) {
-
-            if (c[i] == 12288) {
-
-                c[i] = (char) 32;
-
-                continue;
-
-            }
-
-            if (c[i] > 65280 && c[i] < 65375)
-
-                c[i] = (char) (c[i] - 65248);
-
-        }
-
-        return new String(c);
-
-    }
 }
