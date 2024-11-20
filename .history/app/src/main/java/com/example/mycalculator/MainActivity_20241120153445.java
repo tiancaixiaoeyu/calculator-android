@@ -79,12 +79,6 @@ public class MainActivity extends AppCompatActivity {
             final Button button = findViewById(buttonId);
             button.setOnClickListener(v -> updateDisplay(button.getText().toString()));
         }
-
-        listViewHistory.setOnItemClickListener((parent, view, position, id) -> {
-            Calculation selectedCalculation = calculations.get(position);
-            textViewDisplay.setText(selectedCalculation.getExpression());
-            isAfterOperation = false;
-        });
     }
     public static Object returnIntegerIfPossible(double value) {
         // 检查浮点数是否为整数（即没有小数部分）
@@ -163,7 +157,20 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-   
+    ListView historyListView = findViewById(R.id.history_listview);
+    historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // 获取点击的历史记录项
+            String selectedItem = (String) parent.getItemAtPosition(position);
+            
+            // 假设你有一个显示计算结果的TextView
+            TextView displayTextView = findViewById(R.id.display_textview);
+            
+            // 将选中的历史记录显示在显示器上
+            displayTextView.setText(selectedItem);
+        }
+    });
 
 
 }

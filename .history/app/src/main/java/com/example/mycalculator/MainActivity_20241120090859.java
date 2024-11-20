@@ -79,12 +79,6 @@ public class MainActivity extends AppCompatActivity {
             final Button button = findViewById(buttonId);
             button.setOnClickListener(v -> updateDisplay(button.getText().toString()));
         }
-
-        listViewHistory.setOnItemClickListener((parent, view, position, id) -> {
-            Calculation selectedCalculation = calculations.get(position);
-            textViewDisplay.setText(selectedCalculation.getExpression());
-            isAfterOperation = false;
-        });
     }
     public static Object returnIntegerIfPossible(double value) {
         // 检查浮点数是否为整数（即没有小数部分）
@@ -117,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 
     private void cancel() {
         String currentText = textViewDisplay.getText().toString();
@@ -163,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-   
 
 
 }
